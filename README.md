@@ -1,2 +1,2 @@
-# expressejs
-Template for creating Node app with express and ejs.
+# bike stats api
+API for the bike stats UI

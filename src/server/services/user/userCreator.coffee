@@ -1,17 +1,16 @@
 dbHandler = require '../db/dbHandler'
-q = require 'q'
 
-create = (user) -> 
-  deferred = q.defer()
+create = (user) ->
+  existingUser = await dbHandler.getOne 'user', { stravaId: user.stravaId }
 
-  dbHandler.getOne('user', stravaId: user.stravaId).then (existingUser) ->
+  try
     if existingUser
-      deferred.resolve(false)
+      return false
     else
-      dbHandler.insert('user', user).then (result) ->
-        deferred.resolve(true)
-
-  return deferred.promise
+      await dbHandler.insert 'user', user
+      return true
+  catch err
+    return false
 
 exports = this
 exports.create = create

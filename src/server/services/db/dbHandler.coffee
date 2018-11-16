@@ -1,71 +1,61 @@
 dbConnector = require './dbConnector'
-BSON = require('bson').BSONPure
-q = require 'q'
+mongo = require 'mongodb'
 
 getAll = (collection, params) ->
-  params = params || {}
-  deferred = q.defer()
-  dbConnector.connect().then (db) ->
+  try
+    params = params || {}
+    db = await dbConnector.connect()
     collection = db.collection(collection)
-    collection.find(params).toArray (err, result)->
-      if err
-        console.log err
-      else
-        deferred.resolve result
-  return deferred.promise
+    result = await collection.find(params).toArray()
+    return result
+  catch err
+    return null
 
 getOne = (collection, params) ->
-  console.log params
-  params = params || {}
-  deferred = q.defer()
-  dbConnector.connect().then (db) ->
-    collection = db.collection(collection)
-    collection.findOne params, (err, result) ->
-      if err
-        console.log err
-      else
-        deferred.resolve result
-  return deferred.promise
+  try
+    params = params || {}
+    db = await dbConnector.connect()
+    collection = db.collection collection
+    console.log params
+    result = await collection.findOne params
+    return result
+  catch err
+    return null
 
 getById = (collection, id) ->
-  o_id = new BSON.ObjectID id
-  deferred = q.defer()
-  dbConnector.connect().then (db) ->
-    collection = db.collection(collection)
-    collection.find(_id: o_id).toArray (err, result)->
-      if err
-        console.log err
-      else
-        deferred.resolve result
-  return deferred.promise
+  try
+    o_id = new mongo.ObjectId id
+    db = await dbConnector.connect()
+    collection = db.collection collection
+    result = await collection.find({ _id: o_id }).toArray()
+    return result
+  catch err
+    console.log err
+    return null
 
 insert = (collection, data) ->
-  console.log "inserting into #{collection}"
-  deferred = q.defer()
-  dbConnector.connect().then (db)->
+  try
+    console.log "inserting into #{collection}"
+    db = await dbConnector.connect()
     collection = db.collection collection
-    collection.insert data, (err, records) ->
-      if err
-        console.log err
-        deferred.resolve false
-      else
-        console.log 'inserted'
-        deferred.resolve true    
-  return deferred.promise
+    result = await collection.insertOne data
+    console.log 'inserted'
+    return result
+  catch err
+    return null
 
 update = (collection, data) ->
-  o_id = new BSON.ObjectID data._id
-  delete data._id
-  deferred = q.defer()
-  dbConnector.connect().then (db) ->
-    collection = db.collection(collection)
-    collection.updateOne(_id: o_id, data, (err, result) ->
-      if err
-        console.log err
-      else
-        deferred.resolve result
-    )
-  return deferred.promise
+  try
+    o_id = new mongo.ObjectId data._id
+    delete data._id
+    newValues = { $set: data }
+    db = await dbConnector.connect()
+    collection = db.collection collection
+    result = await collection.updateOne { _id: o_id }, newValues
+    return result
+  catch err
+    console.log err
+    return null
 
 
 exports = this

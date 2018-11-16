@@ -1,12 +1,11 @@
 dbHandler = require '../db/dbHandler'
-q = require 'q'
 
 insert = (bike) ->
-  deferred = q.defer()
-
-  dbHandler.insert('bike', bike).then (result) ->      
-    deferred.resolve result
-  return deferred.promise
+  try
+    result = await dbHandler.insert 'bike', bike
+    return result
+  catch err
+    return false
 
 exports = this
 exports.insert = insert

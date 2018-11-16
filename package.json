@@ -4,16 +4,14 @@
     "url": ""
   },
   "dependencies": {
-    "coffee-script": "1.12.7",
-    "mocha": "*",
+    "body-parser": "1.18.3",
+    "coffeescript": "2.3.2",
+    "cors": "^2.8.5",
     "express": "4.16.3",
-    "ejs": "2.6.1",
-    "ncp": "2.0.0",
-    "request": "2.88.0",
+    "mocha": "*",
     "mongodb": "^3.1.6",
-    "q": "^1.5.1",
-    "bson": "^3.0.2",
-    "body-parser": "1.18.3"
+    "ncp": "2.0.0",
+    "request": "2.88.0"
   },
   "devDependencies": {
     "nodemon": "1.18.4"
@@ -24,6 +22,6 @@
     "hot-coffee": "coffee -o dist/ -cw src/",
     "hot-tests": "coffee -cwo spec/ spec/",
     "postinstall": "npm run brew-coffee",
-    "start": "nodemon ./dist/server/index"
+    "start": "coffee -o dist/ -cw src/ | nodemon ./dist/server/index"
   }
 }

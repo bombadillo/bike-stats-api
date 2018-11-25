@@ -44,6 +44,17 @@ insert = (collection, data) ->
   catch err
     return null
 
+insertMany = (collection, data) ->
+  try
+    console.log "inserting many into #{collection}"
+    db = await dbConnector.connect()
+    collection = db.collection collection
+    result = await collection.insertMany data
+    console.log 'inserted many'
+    return result
+  catch err
+    return null
+
 update = (collection, data) ->
   try
     o_id = new mongo.ObjectId data._id

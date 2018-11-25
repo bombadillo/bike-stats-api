@@ -1,5 +1,6 @@
 urls =
   databaseUri: 'mongodb://localhost:27017'
+  stravaUrl: 'http://www.strava.com/api/v3/athlete/activities'
 
 db =
   name: 'bikeStats'

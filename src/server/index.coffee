@@ -11,7 +11,7 @@ app.use bodyParser.json()
 errorHandler.handleUncaughtErrors()
 
 start = ->
-  app.set 'port', (process.env.PORT || 5000)
+  app.set 'port', (process.env.PORT || 5003)
   api.start app
   app.listen app.get('port'), ->
     console.log 'The app is running on port', app.get 'port'

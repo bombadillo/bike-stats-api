@@ -5,6 +5,8 @@ create = (user) ->
 
   try
     if existingUser
+      existingUser.bikes = user.bikes
+      await dbHandler.update 'user', existingUser
       response = false
     else
       await dbHandler.insert 'user', user

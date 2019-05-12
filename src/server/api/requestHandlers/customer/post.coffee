@@ -9,7 +9,7 @@ handle = (server) ->
         response.send { created: created }
       else
         response.status 200
-        response.send()
+        response.send { created: created }
     catch err
       response.status 500
       response.send()
